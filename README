@@ -1,9 +1,33 @@
 encode_field
 ============
 
-Description goes here.
+This gem adds easy field encoding to ActiveRecord objects.  An example
+will show it best:
+
+  class Account < ActiveRecord::Base
+    encode_field :preferences
+  end
+
+Now you can assign regular objects to the virtual field 'preferences',
+and have them automatically encoded upon saving to the db, and decoded
+when loading:
+
+  a = Account.create! :preferences => {:type => 'platinum', "email" => "joe@example.com", :age => 23}
+  Account.find(a.id).preferences #  => {:type => 'platinum', "email" => "joe@example.com", :age => 23} 
+  
+Using encode_field requires there to be a field named
+encoded_#{field_name}, and this field must be either a string or text
+field.  So in the example above, we would have a migration somewhere
+that looks like:
+
+  add_column :accounts, :encoded_preferences, :text
+
+encode_field also gives you an AR query method for checking if a field
+has a value:
+
+  Account.new(:preferences => nil).preferences?  # => false
 
 COPYRIGHT
 =========
 
-Copyright (c) 2008 Pat Maddox. See LICENSE for details.
+Copyright (c) 2008 Pat Maddox. MIT License (see LICENSE)
