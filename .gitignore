@@ -3,3 +3,4 @@
 coverage
 spec/log
 spec/db/*.sqlite3
+encode_field*.gem
